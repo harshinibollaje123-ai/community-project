@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Tulu Heritage 360°</title>
+
+<script type="module"
+src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
+</script>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f5f1e8;
+    color: #24372c;
+}
+
+/* HEADER */
+
+header {
+    background: #173d2b;
+    color: white;
+    padding: 22px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 30px;
+    letter-spacing: 1px;
+}
+
+header p {
+    margin-top: 8px;
+    color: #f2d8a5;
+}
+
+/* BUTTON */
+
+button {
+    background: #b77a25;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background: #865719;
+}
+
+/* LOGIN */
+
+#authPage {
+    width: 90%;
+    max-width: 420px;
+    margin: 65px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px #0002;
+}
+
+#authPage h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #173d2b;
+}
+
+input {
+    width: 100%;
+    padding: 13px;
+    margin: 9px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.auth-buttons button {
+    flex: 1;
+}
+
+#submitButton {
+    width: 100%;
+    margin-top: 10px;
+}
+
+#message {
+    text-align: center;
+    color: #c0392b;
+    margin-top: 12px;
+}
+
+/* DASHBOARD */
+
+#dashboard {
+    display: none;
+}
+
+.dashboard {
+    padding: 25px;
+}
+
+.dashboard-top {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.search-area {
+    margin: 20px 0;
+}
+
+.search-area input {
+    padding: 15px;
+    border: 2px solid #b77a25;
+}
+
+/* TEMPLE CARDS */
+
+#templeCards {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit, minmax(240px, 1fr));
+    gap: 22px;
+}
+
+.temple-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px #0002;
+    transition: 0.3s;
+}
+
+.temple-card:hover {
+    transform: translateY(-5px);
+}
+
+.temple-image {
+    height: 175px;
+    background: linear-gradient(135deg, #d9bd87, #315b40);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 65px;
+    color: white;
+}
+
+.temple-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.temple-content {
+    padding: 18px;
+}
+
+.temple-content h3 {
+    color: #173d2b;
+    margin-bottom: 12px;
+}
+
+.temple-content p {
+    margin: 8px 0;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+.temple-content button {
+    width: 100%;
+    margin-top: 12px;
+}
+
+/* DETAILS PAGE */
+
+#detailsPage {
+    display: none;
+    padding: 25px;
+}
+
+.details-box {
+    max-width: 1000px;
+    margin: 20px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px #0002;
+}
+
+.details-box h1 {
+    color: #173d2b;
+    margin: 20px 0;
+}
+
+.details-box h2 {
+    margin-top: 30px;
+    color: #173d2b;
+}
+
+.details-box h3 {
+    color: #b77a25;
+    margin-top: 22px;
+}
+
+.details-box p {
+    line-height: 1.8;
+    margin-top: 8px;
+}
+
+.detail-image {
+    width: 100%;
+    max-height: 350px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+model-viewer {
+    width: 100%;
+    height: 420px;
+    background: #eee;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+#modelMessage {
+    background: #fff3d9;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 12px;
+}
+
+/* FOOTER */
+
+footer {
+    background: #173d2b;
+    color: white;
+    text-align: center;
+    padding: 22px;
+    margin-top: 40px;
+}
+
+@media(max-width: 600px) {
+    .dashboard {
+        padding: 15px;
+    }
+
+    .details-box {
+        padding: 15px;
+    }
+
+    model-viewer {
+        height: 280px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- MAIN HEADER -->
+
+<header>
+    <h1>🏛️ TULU HERITAGE 360°</h1>
+    <p>Discover the Ancient Temples of Dakshina Kannada</p>
+</header>
+
+
+<!-- LOGIN AND REGISTER PAGE -->
+
+<section id="authPage">
+
+    <h2 id="authTitle">Login</h2>
+
+    <input
+        type="text"
+        id="name"
+        placeholder="Enter your name"
+        style="display:none;"
+    >
+
+    <input
+        type="email"
+        id="email"
+        placeholder="Enter your email"
+    >
+
+    <input
+        type="password"
+        id="password"
+        placeholder="Enter your password"
+    >
+
+    <button id="submitButton" onclick="submitAuth()">
+        Login
+    </button>
+
+    <div class="auth-buttons">
+        <button onclick="setMode('login')">
+            Login
+        </button>
+
+        <button onclick="setMode('register')">
+            Register
+        </button>
+    </div>
+
+    <p id="message"></p>
+
+</section>
+
+
+<!-- TEMPLE DASHBOARD -->
+
+<section id="dashboard">
+
+    <div class="dashboard">
+
+        <div class="dashboard-top">
+
+            <div>
+                <h2>Temple Explorer</h2>
+                <p id="welcomeText">Welcome</p>
+            </div>
+
+            <button onclick="logout()">
+                Logout
+            </button>
+
+        </div>
+
+        <h2>Explore Famous Temples</h2>
+
+        <!-- TOP SEARCH BAR -->
+
+        <div class="search-area">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="🔍 Search temple by name, location or deity..."
+                oninput="searchTemple()"
+            >
+
+        </div>
+
+        <!-- TEMPLE CARDS -->
+
+        <div id="templeCards"></div>
+
+    </div>
+
+</section>
+
+
+<!-- TEMPLE DETAILS PAGE -->
+
+<section id="detailsPage">
+
+    <button onclick="backToDashboard()">
+        ← Back to Temples
+    </button>
+
+    <div class="details-box">
+
+        <h1 id="detailName"></h1>
+
+        <p>
+            <b>Location:</b>
+            <span id="detailLocation"></span>
+        </p>
+
+        <p>
+            <b>Main Deity:</b>
+            <span id="detailDeity"></span>
+        </p>
+
+        <img
+            id="detailImage"
+            class="detail-image"
+            style="display:none;"
+            alt="Temple photograph"
+        >
+
+        <h3>Why is this temple famous?</h3>
+        <p id="detailFamous"></p>
+
+        <h3>Temple History</h3>
+        <p id="detailHistory"></p>
+
+        <h3>Architecture</h3>
+        <p id="detailArchitecture"></p>
+
+        <h3>Festivals</h3>
+        <p id="detailFestivals"></p>
+
+        <h3>Historical and Cultural Significance</h3>
+        <p id="detailSignificance"></p>
+
+        <!-- 3D VIEW -->
+
+        <h2>Explore Temple in 3D</h2>
+
+        <p>
+            Rotate and zoom the 3D temple model when a model is available.
+        </p>
+
+        <model-viewer
+            id="templeModel"
+            camera-controls
+            auto-rotate
+            shadow-intensity="1"
+            alt="Interactive temple 3D model">
+        </model-viewer>
+
+        <div id="modelMessage">
+            3D model is not available yet.
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+    <h3>Tulu Heritage 360°</h3>
+    <p>Preserving the Cultural Heritage of Dakshina Kannada</p>
+    <p>© 2026 Tulu Heritage Project</p>
+</footer>
+
+
+<script>
+
+// =====================================
+// AUTHENTICATION MODE
+// =====================================
+
+let authMode = "login";
+let temples = [];
+
+
+function setMode(mode) {
+
+    authMode = mode;
+
+    document.getElementById("authTitle").textContent =
+        mode === "login" ? "Login" : "Create Account";
+
+    document.getElementById("name").style.display =
+        mode === "register" ? "block" : "none";
+
+    document.getElementById("submitButton").textContent =
+        mode === "login" ? "Login" : "Register";
+
+    document.getElementById("message").textContent = "";
+
+}
+
+
+// =====================================
+// LOGIN AND REGISTER
+// =====================================
+
+async function submitAuth() {
+
+    const name =
+        document.getElementById("name").value.trim();
+
+    const email =
+        document.getElementById("email").value.trim();
+
+    const password =
+        document.getElementById("password").value;
+
+    if (!email || !password) {
+
+        document.getElementById("message").textContent =
+            "Please enter email and password";
+
+        return;
+    }
+
+    if (authMode === "register" && !name) {
+
+        document.getElementById("message").textContent =
+            "Please enter your name";
+
+        return;
+    }
+
+    const url = authMode === "login"
+        ? "/api/login"
+        : "/api/register";
+
+    const data = {
+        name: name,
+        email: email,
+        password: password
+    };
+
+    try {
+
+        const response = await fetch(url, {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(data)
+
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+
+            document.getElementById("message").textContent =
+                result.error || "Login failed";
+
+            return;
+        }
+
+        openDashboard(result.name || name);
+
+    } catch(error) {
+
+        document.getElementById("message").textContent =
+            "Unable to connect to Flask server";
+
+    }
+
+}
+
+
+// =====================================
+// CHECK EXISTING LOGIN
+// =====================================
+
+async function checkLogin() {
+
+    try {
+
+        const response = await fetch("/api/me");
+
+        const result = await response.json();
+
+        if (result.logged_in) {
+
+            openDashboard(result.name);
+
+        }
+
+    } catch(error) {
+
+        console.log("Login check failed:", error);
+
+    }
+
+}
+
+
+// =====================================
+// OPEN DASHBOARD
+// =====================================
+
+async function openDashboard(name) {
+
+    document.getElementById("authPage").style.display =
+        "none";
+
+    document.getElementById("dashboard").style.display =
+        "block";
+
+    document.getElementById("detailsPage").style.display =
+        "none";
+
+    document.getElementById("welcomeText").textContent =
+        "Welcome, " + (name || "Visitor");
+
+    await loadTemples();
+
+}
+
+
+// =====================================
+// LOAD TEMPLES FROM BACKEND
+// =====================================
+
+async function loadTemples() {
+
+    try {
+
+        const response = await fetch("/api/temples");
+
+        const result = await response.json();
+
+        if (!response.ok) {
+
+            alert(result.error || "Unable to load temples");
+
+            return;
+        }
+
+        temples = result;
+
+        displayTemples(temples);
+
+    } catch(error) {
+
+        alert("Temple loading failed. Check Flask server.");
+
+    }
+
+}
+
+
+// =====================================
+// DISPLAY TEMPLE CARDS
+// =====================================
+
+function displayTemples(list) {
+
+    const container =
+        document.getElementById("templeCards");
+
+    container.innerHTML = "";
+
+    if (list.length === 0) {
+
+        container.textContent = "No temples found.";
+
+        return;
+    }
+
+    list.forEach(temple => {
+
+        const card = document.createElement("div");
+
+        card.className = "temple-card";
+
+        const imageBox = document.createElement("div");
+
+        imageBox.className = "temple-image";
+
+        if (temple.image) {
+
+            const img = document.createElement("img");
+
+            img.src = temple.image;
+            img.alt = temple.name || "Temple";
+
+            img.onerror = function() {
+                imageBox.textContent = "🏛️";
+            };
+
+            imageBox.appendChild(img);
+
+        } else {
+
+            imageBox.textContent = "🏛️";
+
+        }
+
+        const content = document.createElement("div");
+
+        content.className = "temple-content";
+
+        const title = document.createElement("h3");
+
+        title.textContent = temple.name || "";
+
+        const location = document.createElement("p");
+
+        location.textContent =
+            "📍 " + (temple.location || "");
+
+        const deity = document.createElement("p");
+
+        deity.textContent =
+            "🙏 " + (temple.deity || "");
+
+        const famous = document.createElement("p");
+
+        famous.textContent =
+            temple.famous || "";
+
+        const button = document.createElement("button");
+
+        button.textContent = "Explore Temple";
+
+        button.onclick = function() {
+            openTemple(temple.id);
+        };
+
+        content.append(
+            title,
+            location,
+            deity,
+            famous,
+            button
+        );
+
+        card.append(imageBox, content);
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+// =====================================
+// SEARCH TEMPLES
+// =====================================
+
+function searchTemple() {
+
+    const value = document
+        .getElementById("searchInput")
+        .value.toLowerCase()
+        .trim();
+
+    const filtered = temples.filter(temple => {
+
+        return (
+
+            (temple.name || "").toLowerCase().includes(value) ||
+
+            (temple.location || "").toLowerCase().includes(value) ||
+
+            (temple.deity || "").toLowerCase().includes(value)
+
+        );
+
+    });
+
+    displayTemples(filtered);
+
+}
+
+
+// =====================================
+// OPEN TEMPLE DETAILS
+// =====================================
+
+async function openTemple(id) {
+
+    try {
+
+        const response = await fetch("/api/temple/" + id);
+
+        const temple = await response.json();
+
+        if (!response.ok) {
+
+            alert(temple.error || "Temple not found");
+
+            return;
+        }
+
+        document.getElementById("dashboard").style.display =
+            "none";
+
+        document.getElementById("detailsPage").style.display =
+            "block";
+
+        document.getElementById("detailName").textContent =
+            temple.name || "";
+
+        document.getElementById("detailLocation").textContent =
+            temple.location || "";
+
+        document.getElementById("detailDeity").textContent =
+            temple.deity || "";
+
+        document.getElementById("detailFamous").textContent =
+            temple.famous || "";
+
+        document.getElementById("detailHistory").textContent =
+            temple.history || "";
+
+        document.getElementById("detailArchitecture").textContent =
+            temple.architecture || "Information coming soon.";
+
+        document.getElementById("detailFestivals").textContent =
+            temple.festivals || "Information coming soon.";
+
+        document.getElementById("detailSignificance").textContent =
+            temple.significance || "Information coming soon.";
+
+        // Temple image
+
+        const detailImage =
+            document.getElementById("detailImage");
+
+        if (temple.image) {
+
+            detailImage.src = temple.image;
+            detailImage.style.display = "block";
+
+        } else {
+
+            detailImage.removeAttribute("src");
+            detailImage.style.display = "none";
+
+        }
+
+        // 3D MODEL
+
+        const viewer =
+            document.getElementById("templeModel");
+
+        const modelMessage =
+            document.getElementById("modelMessage");
+
+        if (temple.model_3d) {
+
+            viewer.src = temple.model_3d;
+
+            modelMessage.textContent =
+                "Use your mouse or touch screen to rotate and zoom.";
+
+        } else {
+
+            viewer.removeAttribute("src");
+
+            modelMessage.textContent =
+                "3D model is not available yet. Add a .glb model file.";
+
+        }
+
+        window.scrollTo(0, 0);
+
+    } catch(error) {
+
+        alert("Unable to load temple details");
+
+    }
+
+}
+
+
+// =====================================
+// BACK TO DASHBOARD
+// =====================================
+
+function backToDashboard() {
+
+    document.getElementById("detailsPage").style.display =
+        "none";
+
+    document.getElementById("dashboard").style.display =
+        "block";
+
+    document.getElementById("templeModel")
+        .removeAttribute("src");
+
+    window.scrollTo(0, 0);
+
+}
+
+
+// =====================================
+// LOGOUT
+// =====================================
+
+async function logout() {
+
+    try {
+
+        await fetch("/api/logout", {
+            method: "POST"
+        });
+
+    } finally {
+
+        temples = [];
+
+        document.getElementById("dashboard").style.display =
+            "none";
+
+        document.getElementById("detailsPage").style.display =
+            "none";
+
+        document.getElementById("authPage").style.display =
+            "block";
+
+        document.getElementById("email").value = "";
+
+        document.getElementById("password").value = "";
+
+        document.getElementById("name").value = "";
+
+        document.getElementById("searchInput").value = "";
+
+        setMode("login");
+
+    }
+
+}
+
+
+// =====================================
+// START WEBSITE
+// =====================================
+
+checkLogin();
+
+</script>
+
+</body>
+</html>
